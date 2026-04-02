@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="dashboard-grid">
+    <article class="hero-panel glass-card reveal">
+        <p class="eyebrow">Admin dashboard</p>
+        <h1>Monitor the quiz ecosystem.</h1>
+        <p class="muted">Track users, attempts, cached AI questions, and activity without leaving the control panel.</p>
+        <div class="dashboard-stats">
+            <div><strong>{{ stats.users }}</strong><span>Users</span></div>
+            <div><strong>{{ stats.admins }}</strong><span>Admins</span></div>
+            <div><strong>{{ stats.questions }}</strong><span>Questions</span></div>
+            <div><strong>{{ stats.attempts }}</strong><span>Attempts</span></div>
+            <div><strong>{{ '%.1f'|format(stats.avg_score) }}</strong><span>Avg Score</span></div>
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Question controls</p>
+        <h2>Manage cached questions</h2>
+        <div class="quiz-actions">
+            <a class="primary-btn" href="{{ url_for('admin.manage_questions') }}">Open Manager</a>
+            <a class="ghost-btn" href="{{ url_for('admin.add_question') }}">Add Question</a>
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Recent users</p>
+        <h2>Newest registrations</h2>
+        <div class="mini-board">
+            {% for user in recent_users %}
+                <div class="mini-board-row">
+                    <strong>{{ user.username }}</strong>
+                    <small>{{ user.email }}</small>
+                    <span>{{ user.created_at.strftime('%d %b %Y') }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="glass-card reveal dashboard-history">
+        <p class="eyebrow">Latest quiz attempts</p>
+        <h2>Activity feed</h2>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Category</th>
+                        <th>Level</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in recent_attempts %}
+                        <tr>
+                            <td>{{ attempt.user.username }}</td>
+                            <td>{{ attempt.category.category_name }}</td>
+                            <td>{{ attempt.level }}</td>
+                            <td>{{ attempt.score }}/{{ attempt.total_questions }}</td>
+                            <td><span class="status-pill status-{{ attempt.status }}">{{ attempt.status.replace('_', ' ') }}</span></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No attempts available yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</section>
+{% endblock %}

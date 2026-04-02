@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Register | AI GK Quiz App{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<section class="auth-layout admin-layout">
+    <div class="hero-card glass-card reveal">
+        <p class="eyebrow">Admin account setup</p>
+        <h1>Create your own admin account for the quiz control panel.</h1>
+        <p class="muted">This page creates an account with admin privileges, so use a strong email and password that only you control.</p>
+    </div>
+
+    <form method="post" class="auth-card glass-card reveal">
+        <p class="eyebrow">Create admin</p>
+        <h2>Admin Signup</h2>
+        <label class="field">
+            <span>Username</span>
+            <input type="text" name="username" placeholder="Admin username" required>
+        </label>
+        <label class="field">
+            <span>Email</span>
+            <input type="email" name="email" placeholder="Admin email" required>
+        </label>
+        <label class="field">
+            <span>Password</span>
+            <input type="password" name="password" placeholder="Minimum 8 characters" required>
+        </label>
+        <label class="field">
+            <span>Confirm Password</span>
+            <input type="password" name="confirm_password" placeholder="Re-enter password" required>
+        </label>
+        <button class="primary-btn" type="submit">Create Admin Account</button>
+        <p class="auth-foot">Already have an admin account? <a href="{{ url_for('admin.login') }}">Admin login</a></p>
+    </form>
+</section>
+{% endblock %}

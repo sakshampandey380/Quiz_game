@@ -1,0 +1,66 @@
+<section
+    class="quiz-shell glass-card reveal"
+    data-quiz-attempt
+    data-attempt-id="{{ attempt.id }}"
+    data-submit-url="{{ url_for('quiz.submit_answer', attempt_id=attempt.id) }}"
+    data-autosave-url="{{ url_for('quiz.autosave_answer', attempt_id=attempt.id) }}"
+    data-abandon-url="{{ url_for('quiz.abandon_attempt', attempt_id=attempt.id) }}"
+    data-submit-all-url="{{ url_for('quiz.submit_attempt', attempt_id=attempt.id) }}"
+    data-result-url="{{ url_for('quiz.result', attempt_id=attempt.id) }}"
+    data-deadline="{{ attempt.expires_at.isoformat() }}"
+    data-level="{{ attempt.level|lower }}"
+>
+    <div class="quiz-topline">
+        <div>
+            <p class="eyebrow">{{ attempt.level }} Level</p>
+            <h1>{{ attempt.category.category_name }} Quiz</h1>
+        </div>
+        <div class="timer-chip" data-timer>
+            <span>Time Left</span>
+            <strong data-timer-display>15:00</strong>
+        </div>
+    </div>
+
+    <div class="progress-wrap">
+        <div class="progress-meta">
+            <span>Question {{ current_index }} / {{ total_questions }}</span>
+            <span>{{ progress_percent|round|int }}% complete</span>
+        </div>
+        <div class="progress-bar">
+            <span style="width: {{ progress_percent }}%;"></span>
+        </div>
+    </div>
+
+    <article class="question-card">
+        <p class="question-badge">One question at a time</p>
+        <h2>{{ question.question }}</h2>
+
+        <form class="option-grid" data-answer-form>
+            {% for option_key, option_value in question.options.items() %}
+                <label class="option-card">
+                    <input
+                        type="radio"
+                        name="selected_option"
+                        value="{{ option_key }}"
+                        {% if saved_answer == option_key %}checked{% endif %}
+                    >
+                    <span class="option-letter">{{ option_key }}</span>
+                    <span class="option-text">{{ option_value }}</span>
+                </label>
+            {% endfor %}
+        </form>
+    </article>
+
+    <div class="quiz-toolbar">
+        <div class="quiz-hint">
+            <span class="pulse-dot"></span>
+            Previous questions stay locked once you move ahead.
+        </div>
+        <div class="quiz-actions">
+            <button type="button" class="ghost-btn" data-submit-quiz>Submit Quiz</button>
+            <button type="button" class="primary-btn" data-next-question>
+                {% if current_index == total_questions %}Finish Quiz{% else %}Save and Next{% endif %}
+            </button>
+        </div>
+    </div>
+</section>

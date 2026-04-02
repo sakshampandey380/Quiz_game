@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Rules | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="panel-grid">
+    <article class="glass-card reveal">
+        <p class="eyebrow">Rules Page</p>
+        <h1>Read the quiz rules before you begin.</h1>
+        <div class="rules-list">
+            <div class="rule-item">10 questions per quiz</div>
+            <div class="rule-item">Each correct answer = 1 mark</div>
+            <div class="rule-item">No negative marking</div>
+            <div class="rule-item">Time limit = 15 minutes</div>
+            <div class="rule-item">Cannot go back to previous questions</div>
+            <div class="rule-item">Refreshing page ends quiz</div>
+            <div class="rule-item">Levels unlock progressively</div>
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Start your first run</p>
+        <h2>Choose category and level</h2>
+        <form method="post" action="{{ url_for('quiz.start_quiz') }}" class="stack-form" data-loading-form>
+            <label class="field">
+                <span>Category</span>
+                <select name="category_id" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.category_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="field">
+                <span>Level</span>
+                <select name="level" required>
+                    {% for level in ['Easy', 'Moderate', 'Hard'] %}
+                        <option value="{{ level }}" {% if level not in unlocked_levels %}disabled{% endif %}>
+                            {{ level }}{% if level not in unlocked_levels %} - Locked{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button class="primary-btn" type="submit">Start Quiz</button>
+        </form>
+    </article>
+</section>
+{% endblock %}

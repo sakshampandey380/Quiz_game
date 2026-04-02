@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Questions | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="glass-card reveal">
+    <div class="card-header">
+        <div>
+            <p class="eyebrow">Question manager</p>
+            <h1>Cached question bank</h1>
+        </div>
+        <a href="{{ url_for('admin.add_question') }}">Add manual question</a>
+    </div>
+
+    <form method="get" class="filter-bar">
+        <select name="category_id">
+            <option value="">All categories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if selected_category_id == category.id %}selected{% endif %}>{{ category.category_name }}</option>
+            {% endfor %}
+        </select>
+        <select name="difficulty">
+            <option value="">All levels</option>
+            {% for level in ['Easy', 'Moderate', 'Hard'] %}
+                <option value="{{ level }}" {% if selected_difficulty == level %}selected{% endif %}>{{ level }}</option>
+            {% endfor %}
+        </select>
+        <button class="ghost-btn" type="submit">Filter</button>
+    </form>
+
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Category</th>
+                    <th>Level</th>
+                    <th>Origin</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                    <tr>
+                        <td>{{ question.question }}</td>
+                        <td>{{ question.category.category_name }}</td>
+                        <td>{{ question.difficulty }}</td>
+                        <td>{{ 'AI' if question.generated_by_ai else 'Manual' }}</td>
+                        <td>{{ 'Active' if question.is_active else 'Hidden' }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('admin.toggle_question', question_id=question.id) }}">
+                                <button class="ghost-btn" type="submit">
+                                    {% if question.is_active %}Hide{% else %}Activate{% endif %}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">No questions found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

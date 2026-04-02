@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="dashboard-grid">
+    <article class="hero-panel glass-card reveal">
+        <p class="eyebrow">Player dashboard</p>
+        <h1>Welcome back, {{ current_user.username }}.</h1>
+        <p class="muted">Pick a category, choose an unlocked level, and let the AI assemble a fresh quiz for you.</p>
+        <div class="dashboard-stats">
+            <div><strong>{{ current_user.total_score }}</strong><span>Total Score</span></div>
+            <div><strong>{{ current_user.highest_unlocked_level }}</strong><span>Highest Level</span></div>
+            <div><strong>{{ recent_attempts|length }}</strong><span>Recent Attempts</span></div>
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Start quiz</p>
+        <h2>Generate a new quiz</h2>
+        {% if active_attempt %}
+            <div class="status-banner">
+                You have an active quiz in progress.
+                <a href="{{ url_for('quiz.play_attempt', attempt_id=active_attempt.id) }}">Resume now</a>
+            </div>
+        {% endif %}
+        <form method="post" action="{{ url_for('quiz.start_quiz') }}" class="stack-form" data-loading-form>
+            <label class="field">
+                <span>Category</span>
+                <select name="category_id" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.category_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="field">
+                <span>Level</span>
+                <select name="level" required>
+                    {% for level in ['Easy', 'Moderate', 'Hard'] %}
+                        <option value="{{ level }}" {% if level not in unlocked_levels %}disabled{% endif %}>
+                            {{ level }}{% if level not in unlocked_levels %} - Locked{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button class="primary-btn" type="submit">Generate Quiz</button>
+        </form>
+        <div class="level-strip">
+            {% for level in ['Easy', 'Moderate', 'Hard'] %}
+                <div class="level-chip {% if level in unlocked_levels %}unlocked{% else %}locked{% endif %}">
+                    <strong>{{ level }}</strong>
+                    <span>{% if level in unlocked_levels %}Unlocked{% else %}Locked{% endif %}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Scores by level</p>
+        <h2>Performance overview</h2>
+        <div class="score-grid">
+            {% for level in ['Easy', 'Moderate', 'Hard'] %}
+                <div class="score-card">
+                    <strong>{{ scores_by_level[level] }}</strong>
+                    <span>{{ level }}</span>
+                    <small>{{ attempts_by_level[level] }} attempt(s)</small>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <div class="card-header">
+            <div>
+                <p class="eyebrow">Leaderboard preview</p>
+                <h2>Top players</h2>
+            </div>
+            <a href="{{ url_for('quiz.leaderboard') }}">View full board</a>
+        </div>
+        <div class="mini-board">
+            {% for user in leaderboard %}
+                <div class="mini-board-row">
+                    <span>#{{ loop.index }}</span>
+                    <strong>{{ user.username }}</strong>
+                    <small>{{ user.highest_unlocked_level }}</small>
+                    <span>{{ user.total_score }} pts</span>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="glass-card reveal dashboard-history">
+        <div class="card-header">
+            <div>
+                <p class="eyebrow">Quiz history</p>
+                <h2>Recent attempts</h2>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Level</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in recent_attempts %}
+                        <tr>
+                            <td>{{ attempt.started_at.strftime('%d %b %Y') }}</td>
+                            <td>{{ attempt.category.category_name }}</td>
+                            <td>{{ attempt.level }}</td>
+                            <td>{{ attempt.score }}/{{ attempt.total_questions }}</td>
+                            <td><span class="status-pill status-{{ attempt.status }}">{{ attempt.status.replace('_', ' ') }}</span></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No quiz attempts yet. Start your first one above.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</section>
+{% endblock %}

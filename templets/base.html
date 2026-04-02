@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI GK Quiz App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animation.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <div class="page-bg">
+        <span class="orb orb-one"></span>
+        <span class="orb orb-two"></span>
+        <span class="orb orb-three"></span>
+        <div class="mesh-grid"></div>
+    </div>
+
+    {% if not hide_header %}
+        <header class="topbar">
+            <a class="brand" href="{{ url_for('quiz.dashboard') }}">
+                <span class="brand-mark">AI</span>
+                <span>
+                    <strong>GK Quiz App</strong>
+                    <small>Play. Learn. Climb.</small>
+                </span>
+            </a>
+
+            <nav class="topnav">
+                {% if current_user.is_authenticated and not current_user.is_admin %}
+                    <a href="{{ url_for('quiz.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('profile.profile') }}">Profile</a>
+                    <a href="{{ url_for('quiz.leaderboard') }}">Leaderboard</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                {% elif current_user.is_authenticated and current_user.is_admin %}
+                    <a href="{{ url_for('admin.dashboard') }}">Admin</a>
+                    <a href="{{ url_for('admin.manage_questions') }}">Questions</a>
+                    <a href="{{ url_for('admin.admin_logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">User Login</a>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                    <a href="{{ url_for('admin.register') }}">Admin Signup</a>
+                    <a href="{{ url_for('admin.login') }}">Admin Login</a>
+                {% endif %}
+                <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                    <span class="theme-toggle-track"></span>
+                    <span class="theme-toggle-thumb"></span>
+                </button>
+            </nav>
+        </header>
+    {% endif %}
+
+    <main class="main-shell">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/animation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

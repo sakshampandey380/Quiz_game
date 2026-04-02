@@ -1,0 +1,85 @@
+.reveal {
+    animation: fadeUp 0.7s ease both;
+}
+
+.reveal:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.reveal:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.reveal:nth-child(4) {
+    animation-delay: 0.24s;
+}
+
+.orb-one {
+    animation: driftOne 18s ease-in-out infinite alternate;
+}
+
+.orb-two {
+    animation: driftTwo 22s ease-in-out infinite alternate;
+}
+
+.orb-three {
+    animation: driftThree 20s ease-in-out infinite alternate;
+}
+
+.pulse-dot {
+    animation: pulse 1.6s infinite;
+}
+
+.confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 18px;
+    top: -20px;
+    z-index: 40;
+    animation: confettiFall 2.8s linear forwards;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 184, 77, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(255, 184, 77, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 184, 77, 0);
+    }
+}
+
+@keyframes driftOne {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(120px, -40px, 0) scale(1.08); }
+}
+
+@keyframes driftTwo {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(-120px, 50px, 0) scale(1.06); }
+}
+
+@keyframes driftThree {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(40px, -90px, 0) scale(1.12); }
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translate3d(var(--x-shift), 110vh, 0) rotate(540deg);
+        opacity: 0.1;
+    }
+}

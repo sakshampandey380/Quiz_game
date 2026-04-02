@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Login | AI GK Quiz App{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+    <div class="hero-card glass-card reveal">
+        <p class="eyebrow">Smart quizzes with AI</p>
+        <h1>Challenge your GK with a polished, timed quiz flow.</h1>
+        <p class="muted">Register once, unlock levels progressively, and let the AI keep generating fresh question sets from your chosen category.</p>
+        <div class="hero-metrics">
+            <div>
+                <strong>10</strong>
+                <span>questions per run</span>
+            </div>
+            <div>
+                <strong>15 min</strong>
+                <span>live countdown</span>
+            </div>
+            <div>
+                <strong>7</strong>
+                <span>GK categories</span>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" class="auth-card glass-card reveal">
+        <p class="eyebrow">Welcome back</p>
+        <h2>User Login</h2>
+        <label class="field">
+            <span>Username or Email</span>
+            <input type="text" name="credential" placeholder="Enter your username or email" required>
+        </label>
+        <label class="field">
+            <span>Password</span>
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </label>
+        <label class="checkbox-field">
+            <input type="checkbox" name="remember">
+            <span>Keep me logged in</span>
+        </label>
+        <button class="primary-btn" type="submit">Login and Continue</button>
+        <p class="auth-foot">New here? <a href="{{ url_for('auth.register') }}">Create your account</a></p>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Profile | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="dashboard-grid">
+    <article class="glass-card reveal profile-card">
+        <img
+            class="profile-avatar"
+            src="{{ url_for('static', filename=current_user.profile_image) }}"
+            alt="{{ current_user.username }}"
+        >
+        <div>
+            <p class="eyebrow">Profile</p>
+            <h1>{{ current_user.username }}</h1>
+            <p class="muted">{{ current_user.email }}</p>
+            <div class="dashboard-stats compact">
+                <div><strong>{{ current_user.total_score }}</strong><span>Total Score</span></div>
+                <div><strong>{{ current_user.highest_unlocked_level }}</strong><span>Top Level</span></div>
+            </div>
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Profile image</p>
+        <h2>Upload avatar</h2>
+        <form method="post" enctype="multipart/form-data" class="stack-form">
+            <label class="field">
+                <span>Select image</span>
+                <input type="file" name="profile_image" accept=".png,.jpg,.jpeg,.gif,.webp">
+            </label>
+            <button type="submit" class="primary-btn">Upload Image</button>
+        </form>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Scores by level</p>
+        <h2>Level breakdown</h2>
+        <div class="score-grid">
+            {% for level, stats in level_stats.items() %}
+                <div class="score-card">
+                    <strong>{{ stats.score }}</strong>
+                    <span>{{ level }}</span>
+                    <small>{{ stats.attempts }} attempt(s)</small>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="glass-card reveal dashboard-history">
+        <p class="eyebrow">Quiz history</p>
+        <h2>All attempts</h2>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Level</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in history %}
+                        <tr>
+                            <td>{{ attempt.started_at.strftime('%d %b %Y %I:%M %p') }}</td>
+                            <td>{{ attempt.category.category_name }}</td>
+                            <td>{{ attempt.level }}</td>
+                            <td>{{ attempt.score }}/{{ attempt.total_questions }}</td>
+                            <td><span class="status-pill status-{{ attempt.status }}">{{ attempt.status.replace('_', ' ') }}</span></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No history available yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</section>
+{% endblock %}

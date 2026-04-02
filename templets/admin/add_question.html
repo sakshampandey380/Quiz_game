@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Add Question | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="glass-card reveal form-panel">
+    <p class="eyebrow">Manual question entry</p>
+    <h1>Add a custom question</h1>
+    <form method="post" class="stack-form">
+        <label class="field">
+            <span>Category</span>
+            <select name="category_id" required>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.category_name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label class="field">
+            <span>Difficulty</span>
+            <select name="difficulty" required>
+                <option value="Easy">Easy</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Hard">Hard</option>
+            </select>
+        </label>
+        <label class="field">
+            <span>Question</span>
+            <textarea name="question" rows="4" required></textarea>
+        </label>
+        <label class="field"><span>Option A</span><input type="text" name="option_a" required></label>
+        <label class="field"><span>Option B</span><input type="text" name="option_b" required></label>
+        <label class="field"><span>Option C</span><input type="text" name="option_c" required></label>
+        <label class="field"><span>Option D</span><input type="text" name="option_d" required></label>
+        <label class="field">
+            <span>Correct Answer</span>
+            <select name="correct_answer" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </select>
+        </label>
+        <button class="primary-btn" type="submit">Save Question</button>
+    </form>
+</section>
+{% endblock %}

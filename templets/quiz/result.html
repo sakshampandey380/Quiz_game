@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Result | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="result-grid">
+    <article class="glass-card reveal score-panel" data-confetti>
+        <p class="eyebrow">Quiz completed</p>
+        <h1>{{ attempt.category.category_name }} · {{ attempt.level }}</h1>
+        <div class="score-highlight">
+            <strong>{{ attempt.score }}</strong>
+            <span>Final Score</span>
+        </div>
+        <div class="result-stats">
+            <div><span>Total Questions</span><strong>{{ attempt.total_questions }}</strong></div>
+            <div><span>Correct</span><strong>{{ attempt.correct_answers }}</strong></div>
+            <div><span>Wrong</span><strong>{{ attempt.wrong_answers }}</strong></div>
+            <div><span>Status</span><strong>{{ attempt.status.replace('_', ' ') }}</strong></div>
+        </div>
+        <div class="quiz-actions">
+            <a class="primary-btn" href="{{ url_for('quiz.dashboard') }}">Back to Dashboard</a>
+            <a class="ghost-btn" href="{{ url_for('quiz.leaderboard') }}">Open Leaderboard</a>
+        </div>
+    </article>
+
+    <article class="glass-card reveal">
+        <p class="eyebrow">Answer review</p>
+        <h2>Question summary</h2>
+        <div class="review-list">
+            {% for answer in answers %}
+                {% set question = question_lookup.get(answer.question_id) %}
+                <div class="review-item {% if answer.is_correct %}correct{% else %}wrong{% endif %}">
+                    <strong>Q{{ answer.question_order }}. {{ question.question if question else 'Question unavailable' }}</strong>
+                    <span>Your answer: {{ answer.selected_option or 'No answer' }}</span>
+                    {% if question %}
+                        <span>Correct answer: {{ question.correct_answer }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

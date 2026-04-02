@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard | AI GK Quiz App{% endblock %}
+
+{% block content %}
+<section class="glass-card reveal">
+    <div class="card-header">
+        <div>
+            <p class="eyebrow">Leaderboard</p>
+            <h1>Top users by total score</h1>
+        </div>
+        <a href="{{ url_for('quiz.dashboard') }}">Back to dashboard</a>
+    </div>
+
+    <div class="table-wrap">
+        <table class="data-table leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Highest Level</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in top_users %}
+                    <tr {% if user.id == current_user.id %}class="current-user-row"{% endif %}>
+                        <td>#{{ loop.index }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.highest_unlocked_level }}</td>
+                        <td>{{ user.total_score }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">No leaderboard data available yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
